@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Foodify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="login" class="section active">
+    <div class="center">
+        <h2 id="formTitle" style=" font-size:60px;"> Foodify 🍔</h2>
+        <h2 id="formTitle">Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        
+        <div id="signupFields" style="display:none;">
+            <input type="number" id="age" placeholder="Age">
+            <input type="email" id="email" placeholder="Email">
+            <input type="text" id="location" placeholder="Location">
+            <input type="text" id="mobile" placeholder="Mobile Number">
+        </div>
+        <button onclick="handleAuth()">Continue</button>
+        <p style="cursor:pointer; text-decoration: underline;" onclick="toggleMode()" id="toggleText">Don't have an account? Sign up</p>
+    </div>
+</div>
+<nav id="navbar" style="display:none;">
+    <div style="font-size: 24px;"><b>Foodify</b></div>
+    <div>
+        <a onclick="show('home')">Home</a>
+        <a onclick="show('restaurants')">Restaurants</a>
+        <a onclick="show('cart')">Cart (<span id="count">0</span>)</a>
+        <a onclick="show('track')">Track</a>
+        <a onclick="show('profile')">Profile 👤</a>
+        <a onclick="show('about')" style="background: #8b5e3c; padding: 5px 12px; border-radius: 5px; margin-left: 15px;">About Us</a>
+    </div>
+</nav>
+<div id="profile" class="section">
+    <h2>User Profile 👤</h2>
+    <div class="card" style="max-width: 400px;">
+        <p><b>Name:</b> <span id="pName"></span></p>
+        <p><b>Age:</b> <span id="pAge"></span></p>
+        <p><b>Email:</b> <span id="pEmail"></span></p>
+        <p><b>Location:</b> <span id="pLocation"></span></p>
+        <p><b>Mobile:</b> <span id="pMobile"></span></p>
+        <button onclick="logout()" style="background: #c0392b;">Logout</button>
+    </div>
+</div>
+
+<!-- New About Us Section -->
+<div id="about" class="section">
+    <div class="about-container">
+        <h2 style="font-size: 40px; border-bottom: 2px solid #8b5e3c; padding-bottom: 10px;">About Foodify</h2>
+        
+        <h3>Our Story 📖</h3>
+        <p>Foodify was born out of a simple passion: making great food accessible to everyone, everywhere. Starting as a small idea in 2024, we realized that the connection between local kitchens and hungry bellies needed to be faster, fresher, and more personal. We built this platform to bridge that gap, ensuring that every meal delivered is a meal celebrated.</p>
+        
+        <h3>Key Features 🌟</h3>
+        <ul>
+            <li><b>Instant Browsing:</b> Access the best local menus with a single click.</li>
+            <li><b>Real-Time Tracking:</b> Watch your meal journey from the pan to your porch.</li>
+            <li><b>Seamless Payments:</b> Choice of COD or secure online transactions.</li>
+            <li><b>Curated Selection:</b> We only partner with high-rated, hygiene-certified restaurants.</li>
+        </ul>
+
+        <h3>Meet the Creators 👩‍💻👨‍💻</h3>
+        <div class="creator-grid">
+            <div class="creator-card">
+                <h4>Ishant</h4>
+                <p><b>Co-Founder & Developer</b></p>
+                <p>Ishant is the technical architect behind Foodify. With a keen eye for performance and user experience, he ensures the platform runs smoothly even during the busiest dinner rushes.</p>
+            </div>
+            <div class="creator-card">
+                <h4>Harshita Kapil</h4>
+                <p><b>Co-Founder & Designer</b></p>
+                <p>Harshita leads the creative vision. She focuses on making Foodify not just a tool, but a beautiful experience, ensuring every interface is as appetizing as the food itself.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="home" class="section">
+    <div class="hero">
+        <h1>Hungry?<br>We’ve Got You Covered 🍔</h1>
+        <p>Delicious meals from Foodify delivered to your doorstep.</p>
+        <button onclick="show('restaurants')" style="padding: 15px 30px; font-size: 18px;">Order Now</button>
+    </div>
+    <div class="features">
+        <div class="feature-box">⚡ <b>Fast Delivery</b><br>Under 30 mins</div>
+        <div class="feature-box">🧑‍🍳 <b>Top Chefs</b><br>Quality Guaranteed</div>
+        <div class="feature-box">💳 <b>Secure Payment</b><br>COD & Online</div>
+    </div>
+</div>
+<div id="restaurants" class="section">
+    <h2>Select a Restaurant</h2>
+    <div class="grid" id="restaurantGrid"></div>
+</div>
+<div id="menu" class="section">
+    <button onclick="show('restaurants')">Restaurants</button>
+    <h2 id="menuTitle">Menu</h2>
+    <div class="grid" id="menuGrid"></div>
+</div>
+<div id="cart" class="section">
+    <h2>Your Cart</h2>
+    <div id="cartContent">
+        <div id="cartItems"></div>
+        <div id="cartSummary" style="margin-top: 20px;">
+            <h3 id="total">Total: ₹0</h3>
+            
+            <div id="paymentArea" style="display:none; margin-top: 20px; border-top: 1px solid #555; padding-top: 20px;">
+                <h4>Select Payment Method</h4>
+                <select id="payMethod" onchange="toggleQR()">
+                    <option value="COD">Cash on Delivery (COD)</option>
+                    <option value="Online">Pay Now (Online)</option>
+                </select>
+                <div id="qr-container" style="display:none;">
+                    <p style="color: black;">Scan to Pay</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=FoodifyPayment" alt="QR Code">
+                </div>
+                <br>
+                <button onclick="placeOrder()" style="background: #27ae60; margin-top: 15px;">Confirm & Place Order</button>
+            </div>
+        </div>
+    </div>
+    <div id="emptyCartMsg" style="display:none;">
+        <p>Your cart is empty. Add some delicious food to track your order!</p>
+        <button onclick="show('restaurants')">Browse Menu</button>
+    </div>
+</div>
+<div id="track" class="section">
+    <h2>Track Your Order</h2>
+    <div class="track-box">
+        <h3 id="status">No Active Orders</h3>
+        <p id="trackMsg">You haven't placed an order yet.</p>
+        <div class="progress" id="progressContainer" style="display:none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div id="trackingSteps" style="display:none; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+            <span>Placed</span>
+            <span>Preparing</span>
+            <span>On the Way</span>
+            <span>Delivered</span>
+        </div>
+        <div id="reviewBox" class="review-section" style="display:none;">
+            <h4>Enjoyed your meal?</h4>
+            <p>Leave a review for the restaurant:</p>
+            <textarea id="reviewText" placeholder="Write your experience..."></textarea><br>
+            <button onclick="submitReview()">Submit Review</button>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+   
+</body>
+</html>
